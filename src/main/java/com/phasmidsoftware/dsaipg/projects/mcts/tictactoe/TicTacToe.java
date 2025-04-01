@@ -107,6 +107,7 @@ public class TicTacToe implements Game<TicTacToe> {
         /**
          * @return the player for this Move.
          */
+        @Override
         public int player() {
             return player;
         }
@@ -145,6 +146,7 @@ public class TicTacToe implements Game<TicTacToe> {
          *
          * @return a G
          */
+        @Override
         public TicTacToe game() {
             return TicTacToe.this;
         }
