@@ -51,7 +51,7 @@ public class TicTacToeNode implements Node<TicTacToe> {
      * @param state the State for the new chile.
      */
     public void addChild(State<TicTacToe> state) {
-        children.add(new TicTacToeNode(state));
+        children.add(new TicTacToeNode(state, this));
     }
 
     /**
@@ -81,7 +81,12 @@ public class TicTacToeNode implements Node<TicTacToe> {
     }
 
     public TicTacToeNode(State<TicTacToe> state) {
+        this(state, null);
+    }
+
+    public TicTacToeNode(State<TicTacToe> state, TicTacToeNode parent) {
         this.state = state;
+        this.parent = parent;
         children = new ArrayList<>();
         initializeNodeData();
     }
@@ -99,7 +104,8 @@ public class TicTacToeNode implements Node<TicTacToe> {
 
     private final State<TicTacToe> state;
     private final ArrayList<Node<TicTacToe>> children;
+    final TicTacToeNode parent;
 
-    private int wins;
-    private int playouts;
+    int wins;
+    int playouts;
 }
