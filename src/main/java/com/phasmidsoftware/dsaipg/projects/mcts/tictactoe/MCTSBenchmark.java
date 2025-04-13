@@ -8,21 +8,21 @@ import java.util.Optional;
 
 public class MCTSBenchmark {
     public static void main(String[] args) {
-        System.out.println("=== Test 1: Decision Time vs Simulations ===");
-        testSimulationTimes();
+        warmUpMCTSRunSearch();
 
-        System.out.println("\n=== Test 2: MCTS vs Random Player ===");
-        playMCTSvsRandom(100, 1000);
+        System.out.println("=== Number of Simulations for 1 move ===");
+        simulationTimesPerMove();
 
-        System.out.println("\n=== Test 2: MCTS vs Random Player ===");
-        playMCTSvsRandom(500, 1000);
+        System.out.println("\n=== MCTS vs Random Player ===");
+        MCTSvsRandom(1000, 10);
+        System.out.println("\n=== MCTS vs Random Player ===");
+        MCTSvsRandom(1000, 1000);
 
-
-        System.out.println("\n=== Test 3: Full Game Decision Times ===");
+        System.out.println("\n=== Full Game Decision Times ===");
         runFullGameWithTiming(1000);
     }
 
-    public static void testSimulationTimes() {
+    public static void simulationTimesPerMove() {
         int[] iterations = {10, 100, 1000, 5000};
         State<TicTacToe> state = new TicTacToe().start();
 
@@ -31,14 +31,14 @@ public class MCTSBenchmark {
             MCTS mcts = new MCTS(root);
 
             long start = System.currentTimeMillis();
-            Node<TicTacToe> best = mcts.runSearch(iter);
+            mcts.runSearch(iter);
             long end = System.currentTimeMillis();
 
             System.out.printf("Simulations: %-5d | Time: %d ms\n", iter, (end - start));
         }
     }
 
-    public static void playMCTSvsRandom(int games, int iterations) {
+    public static void MCTSvsRandom(int games, int iterations) {
         int mctsWins = 0, randomWins = 0, draws = 0;
 
         for (int g = 0; g < games; g++) {
@@ -61,8 +61,8 @@ public class MCTSBenchmark {
             else if (winner.get() == TicTacToe.X) mctsWins++;
             else randomWins++;
         }
-
         System.out.printf("After %d games:\n", games);
+        System.out.printf("Simulations for each move: %d\n", iterations);
         System.out.printf("MCTS Wins   : %d\n", mctsWins);
         System.out.printf("Random Wins : %d\n", randomWins);
         System.out.printf("Draws       : %d\n", draws);
@@ -89,8 +89,16 @@ public class MCTSBenchmark {
             player = 1 - player;
         }
 
-        System.out.println("Game over: " + (state.winner().isPresent() ? "Winner is " + state.winner().get() : "Draw"));
+        System.out.println(state.winner().isPresent() ? "Winner is " + state.winner().get() : "Draw");
         System.out.printf("Total moves: %d | Total time: %d ms | Avg time per move: %.2f ms\n",
                 moves, totalTime, totalTime / (double) moves);
+    }
+
+    private static void warmUpMCTSRunSearch() {
+        State<TicTacToe> state = new TicTacToe().start();
+        for (int i = 0; i < 10; i++) {
+            MCTS mcts = new MCTS(new TicTacToeNode(state));
+            mcts.runSearch(5000);
+        }
     }
 }

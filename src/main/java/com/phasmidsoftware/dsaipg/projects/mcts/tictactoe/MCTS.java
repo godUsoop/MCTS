@@ -66,7 +66,7 @@ public class MCTS {
 
     private Node<TicTacToe> expand(Node<TicTacToe> node) {
         if (!node.isLeaf() && node.children().isEmpty()) {
-            node.explore(); // this should populate children
+            node.explore();
         }
 
         List<Node<TicTacToe>> children = new ArrayList<>(node.children());
