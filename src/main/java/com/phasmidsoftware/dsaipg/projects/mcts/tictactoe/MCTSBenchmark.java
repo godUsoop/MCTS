@@ -95,8 +95,8 @@ public class MCTSBenchmark {
     }
 
     private static void warmUpMCTSRunSearch() {
-        State<TicTacToe> state = new TicTacToe().start();
         for (int i = 0; i < 10; i++) {
+            State<TicTacToe> state = new TicTacToe().start();
             MCTS mcts = new MCTS(new TicTacToeNode(state));
             mcts.runSearch(5000);
         }
