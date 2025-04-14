@@ -58,6 +58,6 @@ public class RandomState {
     }
 
     private final int x;
-    private final Random random;
+    public final Random random;
 
 }
