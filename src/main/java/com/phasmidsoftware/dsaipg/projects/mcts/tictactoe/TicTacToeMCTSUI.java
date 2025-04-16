@@ -21,7 +21,7 @@ public class TicTacToeMCTSUI extends TicTacToe {
             System.out.println("Current grid：\n" + ((TicTacToeState) state).position().render());
             System.out.println("Next player: " + currentPlayer + (currentPlayer == 1 ? " (X)" : " (O)"));
 
-            // 如果輪到使用者下
+            
             if (currentPlayer == player) {
                 boolean validMove = false;
                 while (!validMove) {
