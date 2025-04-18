@@ -1,5 +1,6 @@
 package com.phasmidsoftware.dsaipg.projects.mcts.tictactoe;
 
+import com.phasmidsoftware.dsaipg.projects.mcts.core.MCTS;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Move;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.Node;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
@@ -28,10 +29,10 @@ public class MCTSBenchmark {
 
         for (int iter : iterations) {
             Node<TicTacToe> root = new TicTacToeNode(state);
-            MCTS mcts = new MCTS(root);
+            TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(root);
 
             long start = System.currentTimeMillis();
-            mcts.runSearch(iter);
+            ticTacToeMcts.runSearch(iter);
             long end = System.currentTimeMillis();
 
             System.out.printf("Simulations: %-5d | Time: %d ms\n", iter, (end - start));
@@ -47,8 +48,8 @@ public class MCTSBenchmark {
 
             while (!state.isTerminal()) {
                 if (currentPlayer == TicTacToe.X) {
-                    MCTS mcts = new MCTS(new TicTacToeNode(state));
-                    state = mcts.runSearch(iterations).state();
+                    MCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(state));
+                    state = ticTacToeMcts.runSearch(iterations).state();
                 } else {
                     Move<TicTacToe> move = state.chooseMove(currentPlayer);
                     state = state.next(move);
@@ -76,8 +77,8 @@ public class MCTSBenchmark {
 
         while (!state.isTerminal()) {
             long start = System.currentTimeMillis();
-            MCTS mcts = new MCTS(new TicTacToeNode(state));
-            Node<TicTacToe> best = mcts.runSearch(iterationsPerMove);
+            TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(state));
+            Node<TicTacToe> best = ticTacToeMcts.runSearch(iterationsPerMove);
             long end = System.currentTimeMillis();
 
             long time = end - start;
@@ -97,8 +98,8 @@ public class MCTSBenchmark {
     private static void warmUpMCTSRunSearch() {
         for (int i = 0; i < 10; i++) {
             State<TicTacToe> state = new TicTacToe().start();
-            MCTS mcts = new MCTS(new TicTacToeNode(state));
-            mcts.runSearch(5000);
+            TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(state));
+            ticTacToeMcts.runSearch(5000);
         }
     }
 }

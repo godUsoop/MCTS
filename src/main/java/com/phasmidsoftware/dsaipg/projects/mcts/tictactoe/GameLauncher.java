@@ -5,7 +5,7 @@ import com.phasmidsoftware.dsaipg.projects.mcts.core.Node;
 import com.phasmidsoftware.dsaipg.projects.mcts.core.State;
 import java.util.Scanner;
 
-public class TicTacToeUI extends TicTacToe {
+public class GameLauncher extends TicTacToe {
 
 
     public void runGame(int player, int version) {
@@ -49,9 +49,9 @@ public class TicTacToeUI extends TicTacToe {
                 }
                 else if (version == 1){
                     TicTacToeNode root = new TicTacToeNode(state);
-                    MCTS mcts = new MCTS(root);
+                    TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(root);
 
-                    Node<TicTacToe> bestNode = mcts.runSearch(1000);
+                    Node<TicTacToe> bestNode = ticTacToeMcts.runSearch(1000);
 
                     state = bestNode.state();
 
@@ -105,7 +105,7 @@ public class TicTacToeUI extends TicTacToe {
 
 
     public static void main(String[] args) {
-        TicTacToeUI game = new TicTacToeUI();
+        GameLauncher game = new GameLauncher();
         int player = game.getPlayer();
         int version = game.chooseVersion();
         game.runGame(player, version);

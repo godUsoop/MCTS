@@ -10,13 +10,13 @@ import java.util.Collection;
 
 import static org.junit.Assert.assertTrue;
 
-public class MCTSTest {
+public class TicTacToeMCTSTest {
 
     @Test
     public void testRunSearchReturnsNewState() {
         State<TicTacToe> initialState = new TicTacToe().start();
-        MCTS mcts = new MCTS(new TicTacToeNode(initialState));
-        Node<TicTacToe> result = mcts.runSearch(100);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(initialState));
+        Node<TicTacToe> result = ticTacToeMcts.runSearch(100);
         assertNotNull(result);
         assertNotEquals(initialState, result.state());
     }
@@ -25,16 +25,16 @@ public class MCTSTest {
     public void testRunSearchOnTerminalState() {
         Position terminalPosition = Position.parsePosition("X X X\nO O .\n. . .", TicTacToe.X);
         State<TicTacToe> terminalState = new TicTacToe().new TicTacToeState(terminalPosition);
-        MCTS mcts = new MCTS(new TicTacToeNode(terminalState));
-        Node<TicTacToe> result = mcts.runSearch(100);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(terminalState));
+        Node<TicTacToe> result = ticTacToeMcts.runSearch(100);
         assertEquals(terminalState, result.state());
     }
 
     @Test
     public void testSimulationProducesValidWinner() {
         State<TicTacToe> state = new TicTacToe().start();
-        MCTS mcts = new MCTS(new TicTacToeNode(state));
-        int winner = mcts.runSearch(10).state().winner().orElse(-1);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(state));
+        int winner = ticTacToeMcts.runSearch(10).state().winner().orElse(-1);
         assertTrue(winner == -1 || winner == 0 || winner == 1);
     }
 
@@ -42,8 +42,8 @@ public class MCTSTest {
     public void testBackpropagationIncreasesPlayouts() {
         State<TicTacToe> initialState = new TicTacToe().start();
         TicTacToeNode root = new TicTacToeNode(initialState);
-        MCTS mcts = new MCTS(root);
-        mcts.runSearch(100);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(root);
+        ticTacToeMcts.runSearch(100);
         assertTrue(root.playouts > 0);
     }
 
@@ -51,8 +51,8 @@ public class MCTSTest {
     public void testExpandAddsChildren() {
         State<TicTacToe> state = new TicTacToe().start();
         TicTacToeNode root = new TicTacToeNode(state);
-        MCTS mcts = new MCTS(root);
-        mcts.runSearch(1);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(root);
+        ticTacToeMcts.runSearch(1);
         assertFalse(root.children().isEmpty());
     }
 
@@ -60,8 +60,8 @@ public class MCTSTest {
     public void testSimulateNearEndGame() {
         Position almostEnd = Position.parsePosition("X O X\nO X O\nX . O", TicTacToe.O);
         State<TicTacToe> state = new TicTacToe().new TicTacToeState(almostEnd);
-        MCTS mcts = new MCTS(new TicTacToeNode(state));
-        int winner = mcts.runSearch(1).state().winner().orElse(-1);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(new TicTacToeNode(state));
+        int winner = ticTacToeMcts.runSearch(1).state().winner().orElse(-1);
         assertTrue(winner == 0 || winner == 1 || winner == -1);
     }
 
@@ -81,17 +81,17 @@ public class MCTSTest {
 
         Node<TicTacToe> parent = new TicTacToeNode(new TicTacToe().start());
 
-        MCTS mcts = new MCTS(parent);
+        TicTacToeMCTS ticTacToeMcts = new TicTacToeMCTS(parent);
         double logParentVisits = Math.log(10);
-        double uct = callUctValue(mcts, mockChild, logParentVisits);
+        double uct = callUctValue(ticTacToeMcts, mockChild, logParentVisits);
         assertTrue(uct > 0);
     }
 
-    private double callUctValue(MCTS mcts, Node<TicTacToe> child, double logVisits) {
+    private double callUctValue(TicTacToeMCTS ticTacToeMcts, Node<TicTacToe> child, double logVisits) {
         try {
-            var method = MCTS.class.getDeclaredMethod("uctValue", Node.class, double.class);
+            var method = TicTacToeMCTS.class.getDeclaredMethod("uctValue", Node.class, double.class);
             method.setAccessible(true);
-            return (double) method.invoke(mcts, child, logVisits);
+            return (double) method.invoke(ticTacToeMcts, child, logVisits);
         } catch (Exception e) {
             throw new RuntimeException("Failed to invoke uctValue via reflection", e);
         }
