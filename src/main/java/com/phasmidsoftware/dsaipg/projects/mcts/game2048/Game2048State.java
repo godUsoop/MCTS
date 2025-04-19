@@ -57,6 +57,13 @@ public class Game2048State implements State<Game2048> {
         return new Game2048State(game, nextBoard, random, player);
     }
 
+    public boolean sameBoard(int[][] a, int[][] b) {
+        for (int i = 0; i < a.length; i++)
+            for (int j = 0; j < a[i].length; j++)
+                if (a[i][j] != b[i][j]) return false;
+        return true;
+    }
+
     public Game2048Board getBoard() { return board; }
     public int getScore() { return board.getScore(); }
     public String render() { return board.render(); }

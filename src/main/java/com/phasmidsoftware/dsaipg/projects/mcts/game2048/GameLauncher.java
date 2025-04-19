@@ -30,7 +30,7 @@ public class GameLauncher {
             Game2048Board before = state.getBoard().copy();
             Game2048State next = (Game2048State) state.next(move);
 
-            if (sameBoard(before.getBoard(), next.getBoard().getBoard())) {
+            if (state.sameBoard(before.getBoard(), next.getBoard().getBoard())) {
                 System.out.println("No tiles moved. Try another direction.");
             } else {
                 state = next;
@@ -45,12 +45,5 @@ public class GameLauncher {
     private static void printState(Game2048State state) {
         System.out.println(state.render());
         System.out.println("Score: " + state.getScore());
-    }
-
-    private static boolean sameBoard(int[][] a, int[][] b) {
-        for (int i = 0; i < a.length; i++)
-            for (int j = 0; j < a[i].length; j++)
-                if (a[i][j] != b[i][j]) return false;
-        return true;
     }
 }
