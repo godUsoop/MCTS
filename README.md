@@ -1,4 +1,4 @@
-##Monte Carlo Tree Search (MCTS)
+## Monte Carlo Tree Search (MCTS)
 
 This project implements the **Monte Carlo Tree Search (MCTS)** algorithm in Java for two games:
 - **Tic-Tac-Toe**
